@@ -4,14 +4,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Index</title>
+  <title>C121B-GITHUB</title>
 </head>
 
 <body>
-  <ul>
-    <li><a href="test.html">test.html</a></li>
-    <li><a href="w01-task.html">w01-task.html</a></li>
-  </ul>
+  <ul id="menu"></ul>
 </body>
+
+<script>
+  const menuItems = [
+    "test.html",
+    "w01-task.html"
+  ];
+
+  let menuContent = "";
+  menuItems.forEach(item => menuContent += `<li><a href="${item}">${item}</a></li>`);
+  document.querySelector("#menu").innerHTML = menuContent;
+</script>
 
 </html>
