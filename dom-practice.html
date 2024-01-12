@@ -20,7 +20,10 @@
       if (e.key === 'Enter') addItem(input);
     });
 
-    btn.addEventListener('click', () => addItem(input));
+    btn.addEventListener('click', () => {
+      addItem(input)
+      input.focus();
+    });
 
     function addItem(input) {
       const value = input.value;
