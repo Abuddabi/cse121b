@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Simple DOM example</title>
+</head>
+
+<body>
+  <section>
+    <p>Enter a new item: <input type="text"> <button id="button" type="button">Add item</button></p>
+    <ul id="shopping-list"></ul>
+  </section>
+
+  <script>
+    const btn = document.querySelector('#button');
+    const input = document.querySelector('input');
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === 'Enter') addItem(input);
+    });
+
+    btn.addEventListener('click', () => addItem(input));
+
+    function addItem(input) {
+      const value = input.value;
+      if (!value) return;
+      input.value = '';
+      const list = document.querySelector('ul');
+
+      const li = document.createElement('li');
+      const deleteBtn = document.createElement('button');
+      deleteBtn.setAttribute('type', 'button');
+      deleteBtn.setAttribute('class', 'delete');
+      deleteBtn.textContent = 'Delete';
+
+      li.textContent = value + ' ';
+      li.appendChild(deleteBtn);
+      list.appendChild(li);
+
+      deleteBtn.addEventListener('click', () => li.remove());
+    }
+
+  </script>
+</body>
+
+</html>
