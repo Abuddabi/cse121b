@@ -1,0 +1,109 @@
+<!-- events.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Events practice: ToDos</title>
+  <style>
+    .todos {
+      width: 300px;
+    }
+
+    .todos>li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid;
+      padding: 0.5em;
+    }
+
+    .todos p {
+      margin: 0;
+    }
+
+    .todos span {
+      cursor: pointer;
+    }
+
+    .strike {
+      text-decoration: line-through;
+      color: gray;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>ToDos</h1>
+  <section>
+    <label for="todo">Enter Task</label>
+    <input name="todo" id="todo" />
+    <button id="submitTask">Enter</button>
+  </section>
+  <ul id="todoList" class="todos"></ul>
+  <script>
+    document.querySelector("#submitTask").addEventListener('click', () => newTask());
+    document.querySelector("#todoList").addEventListener('click', (e) => manageTasks(e));
+
+    let tasks = [];
+
+    function renderTasks(tasks) {
+      const list = document.querySelector("#todoList");
+      list.innerHTML = '';
+
+      const tasksHtml = tasks.map(task => {
+        return `
+        <li ${task.completed ? 'class="strike"' : ""}>
+          <p>${task.detail}</p>
+          <div>
+            <span data-function="delete">❎</span>
+            <span data-function="complete">✅</span>
+          </div>
+        </li>`;
+      }).join("");
+
+      list.innerHTML = tasksHtml;
+    }
+
+    function newTask() {
+      const input = document.querySelector('#todo');
+      if (!input.value) return;
+
+      const newTask = { detail: input.value, completed: false };
+      input.value = '';
+      input.focus();
+      tasks.push(newTask);
+
+      renderTasks(tasks);
+    }
+
+    function removeTask(taskElement) {
+      tasks = tasks.filter(
+        (task) => task.detail != taskElement.children[0].textContent
+      );
+      taskElement.remove();
+    }
+
+    function completeTask(taskElement) {
+      const taskIndex = tasks.findIndex(
+        (task) => task.detail === taskElement.children[0].textContent
+      );
+      tasks[taskIndex].completed = tasks[taskIndex].completed ? false : true;
+      taskElement.classList.toggle("strike");
+    }
+
+    function manageTasks(event) {
+      const intention = event.target.dataset.function;
+      if (!intention) return;
+
+      const taskElement = event.target.closest("li");
+
+      if (intention === 'delete') removeTask(taskElement);
+      else if (intention === 'complete') completeTask(taskElement);
+    }
+  </script>
+</body>
+
+</html>
