@@ -20,6 +20,7 @@ const displayTemples = (temples) => {
     img.setAttribute("src", temple.imageUrl);
     img.setAttribute("alt", temple.location);
 
+    // Stretch
     const a = createHTML("a");
     const templeNameForURL = temple.templeName
       .toLowerCase()
@@ -48,6 +49,7 @@ const getTemples = async () => {
 const reset = () => templesElement.innerHTML = "";
 
 /* filterTemples Function */
+// sortBy in the Criteria, filterTemples in the Assignment ? 
 const filterTemples = (temples) => {
   reset();
   let filteredTemples = [];
@@ -63,7 +65,7 @@ const filterTemples = (temples) => {
       filteredTemples = templeList.filter((temple) => new Date(temple.dedicated) < before1950);
       break;
     case "A-Z":
-      filteredTemples = templeList.sort((a, b) => a.templeName > b.templeName);
+      filteredTemples = [...templeList].sort((a, b) => a.templeName > b.templeName);
       break;
     case "all":
       filteredTemples = templeList;
