@@ -1,7 +1,16 @@
+const allJokes = [
+  "Chuck Norris does infinit loops in 4 seconds."
+];
+
 const init = document.querySelector("#init");
 
 init.addEventListener('click', async (e) => {
   const button = e.target;
+
+  if (button.disabled) {
+    console.log("Button is disabled.");
+    return;
+  }
 
   if (!button.dataset.width) {
     const width = button.offsetWidth;
@@ -12,20 +21,40 @@ init.addEventListener('click', async (e) => {
   const oldText = button.textContent;
   button.textContent = "Loading...";
 
+  let newOne = false
+  let counter = 0;
+  let joke;
+  do {
+    joke = await getNewJoke();
+    newOne = !allJokes.includes(joke);
+    if (!newOne) console.log('same');
+    counter++;
+    if (counter > 12) { // limit too much requests 
+      console.error('The are no new jokes.');
+      button.textContent = "Jokes are over.";
+      button.disabled = true;
+      return;
+    }
+  } while (!newOne);
+
+  allJokes.push(joke);
+  populateTable(joke);
+  button.textContent = oldText;
+});
+
+const getNewJoke = async () => {
   const url = "https://api.chucknorris.io/jokes/random?category=dev";
 
   try {
     const response = await fetch(url);
     const result = await response.json();
     const value = result.value;
-    console.log(value);
-
-    populateTable(value);
-    button.textContent = oldText;
+    return value;
   } catch (error) {
     console.error(error);
+    return false;
   }
-});
+}
 
 const populateTable = (joke) => {
   const table = document.querySelector("table");
