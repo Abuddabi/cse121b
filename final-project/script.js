@@ -7,10 +7,8 @@ const init = document.querySelector("#init");
 init.addEventListener('click', async (e) => {
   const button = e.target;
 
-  if (button.disabled) {
-    console.log("Button is disabled.");
-    return;
-  }
+  if (button.disabled) return;
+  button.disabled = true; // prevent new clicks until completing  
 
   if (!button.dataset.width) {
     const width = button.offsetWidth;
@@ -21,18 +19,16 @@ init.addEventListener('click', async (e) => {
   const oldText = button.textContent;
   button.textContent = "Loading...";
 
-  let newOne = false
+  let newOne;
   let counter = 0;
   let joke;
   do {
     joke = await getNewJoke();
     newOne = !allJokes.includes(joke);
-    if (!newOne) console.log('same');
     counter++;
     if (counter > 12) { // limit too much requests 
       console.error('The are no new jokes.');
       button.textContent = "Jokes are over.";
-      button.disabled = true;
       return;
     }
   } while (!newOne);
@@ -40,6 +36,7 @@ init.addEventListener('click', async (e) => {
   allJokes.push(joke);
   populateTable(joke);
   button.textContent = oldText;
+  button.disabled = false;
 });
 
 const getNewJoke = async () => {
